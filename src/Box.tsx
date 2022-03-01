@@ -24,9 +24,11 @@ const Boxed: FunctionComponent = () => {
   return (
     <mesh
       ref={meshRef}
+      key={"swapmesh"}
       name="boxed"
       fromInstance={mesh}
       onCreated={handleOnCreate}
+      disposeInstanceOnUnmount
     ></mesh>
   );
 };
