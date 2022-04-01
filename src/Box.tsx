@@ -1,35 +1,32 @@
-import { Mesh, MeshBuilder } from "@babylonjs/core";
-import React, { useEffect, useRef } from "react";
-import { FunctionComponent, useMemo, useState } from "react";
+import { Mesh, MeshBuilder, Vector3 } from "@babylonjs/core";
+import React from "react";
+import { FunctionComponent, useState } from "react";
 import { useScene } from "react-babylonjs";
 
 const Boxed: FunctionComponent = () => {
   const scene = useScene();
 
-  const meshRef = useRef<Mesh>();
-  const [mesh, setNewMesh] = useState<Mesh>(
-    MeshBuilder.CreateBox("box", {}, scene)
-  );
+  const [points, setPoints] = useState([Vector3.Zero(), Vector3.One()]);
 
-  const handleOnCreate = () => {
-    const sphereMesh = MeshBuilder.CreateSphere("sphere", {}, scene);
-    sphereMesh.position.y = 1;
-
-    setNewMesh(sphereMesh);
-    meshRef.current = mesh;
+  const handleOnCreate = (mesh: Mesh) => {
+    setInterval(() => {
+      setPoints((prev) => [Vector3.Zero(), prev[1].scale(1.01)]);
+    }, 100);
   };
 
-  console.log(mesh.name, meshRef.current?.name);
+  console.log(points[1]);
 
   return (
-    <mesh
-      ref={meshRef}
-      key={"swapmesh"}
-      name="boxed"
-      fromInstance={mesh}
-      onCreated={handleOnCreate}
-      disposeInstanceOnUnmount
-    ></mesh>
+    <>
+      <dashedLines
+        name="line"
+        points={points}
+        dashSize={1}
+        gapSize={1}
+        dashNb={10}
+        onCreated={handleOnCreate}
+      ></dashedLines>
+    </>
   );
 };
 
